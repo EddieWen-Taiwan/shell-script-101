@@ -1,7 +1,5 @@
 #! /usr/bin/env node
 
-// node index.js <path/to/target> <width> <height>
-
 const fs = require('fs');
 const lwip = require('lwip');
 
