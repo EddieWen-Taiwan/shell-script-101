@@ -16,7 +16,8 @@ const userInput = {
 };
 
 if( userInput.width === 'auto' && userInput.height === 'auto' ) {
-	return 'Please enter size.';
+	console.log('Please enter a new size.');
+	return;
 }
 
 /**
@@ -58,7 +59,8 @@ const resizeImg = (path) => {
 			.resize(nextWidth, nextHeight)
 			.writeFile(path, (err) => {
 				if( err ) {
-					return console.log(err);
+					console.log(err);
+					return;
 				}
 
 				console.log(`${path} file is resizd`);
