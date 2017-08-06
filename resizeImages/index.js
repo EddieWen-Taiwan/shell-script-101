@@ -79,12 +79,12 @@ if( userInput.type === 'file' ) {
 
 }
 
-acceptedFileExtenstion.map((type) => {
+acceptedFileExtenstion.forEach((type) => {
 
 	const regex = new RegExp(`\.${type}$`);
 
 	fs.readdirSync(userInput.target)
-		.filter((file) => regex.test(file))
-		.map((file) => resizeImg(`./${userInput.target}/${file}`));
+		.filter((filename) => regex.test(filename))
+		.forEach((filename) => resizeImg(`./${userInput.target}/${filename}`));
 
 });
