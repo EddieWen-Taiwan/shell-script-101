@@ -68,19 +68,23 @@ const resizeImg = (path) => {
 
 };
 
-if( userInput.type === 'folder' ) {
+/**
+ * there is only one file
+ */
+if( userInput.type === 'file' ) {
 
-	acceptedFileExtenstion.map((type) => {
-
-		const regex = new RegExp(`\.${type}$`);
-
-		fs.readdirSync(userInput.target)
-			.filter((file) => regex.test(file))
-			.map((file) => resizeImg(`./${userInput.target}/${file}`));
-
-	});
-
-}
-else {
 	resizeImg(userInput.target);
+
+	return;
+
 }
+
+acceptedFileExtenstion.map((type) => {
+
+	const regex = new RegExp(`\.${type}$`);
+
+	fs.readdirSync(userInput.target)
+		.filter((file) => regex.test(file))
+		.map((file) => resizeImg(`./${userInput.target}/${file}`));
+
+});
