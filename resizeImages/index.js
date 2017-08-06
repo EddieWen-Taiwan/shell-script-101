@@ -6,32 +6,32 @@ const lwip = require('lwip');
 /**
  * used when target is a folder
  */
-const acceptExtenstion = [ 'jpg', 'png' ];
+const acceptedFileExtenstion = ['jpg', 'png'];
 
-const usr = {
+const userInput = {
 	type: 'folder',
 	target: process.argv[2],
 	width: /^\d+$/.test(process.argv[3]) ? parseInt(process.argv[3]) : 'auto',
 	height: /^\d+$/.test(process.argv[4]) ? parseInt(process.argv[4]) : 'auto',
 };
 
-if( usr.width === 'auto' && usr.height === 'auto' ) {
+if( userInput.width === 'auto' && userInput.height === 'auto' ) {
 	return 'Please enter size.';
 }
 
 /**
  * handle target type (folder / file)
  */
-if( fs.statSync(usr.target).isDirectory() ) {
+if( fs.statSync(userInput.target).isDirectory() ) {
 	/**
-	 * clear path
+	 * remove the final slack in the path
 	 */
-	if( usr.target.substr(-1) === '/' ) {
-		usr.target = usr.target.substr(0, usr.target.length - 1);
+	if( userInput.target.substr(-1) === '/' ) {
+		userInput.target = userInput.target.substr(0, userInput.target.length - 1);
 	}
 }
 else {
-	usr.type = 'file';
+	userInput.type = 'file';
 }
 
 /**
@@ -39,10 +39,10 @@ else {
  */
 const resizeImg = (path) => {
 
-	lwip.open( path, (err, img) => {
+	lwip.open(path, (err, img) => {
 
-		let nextWidth = usr.width;
-		let nextHeight = usr.height;
+		let nextWidth = userInput.width;
+		let nextHeight = userInput.height;
 
 		if( nextWidth === 'auto') {
 
@@ -56,8 +56,8 @@ const resizeImg = (path) => {
 
 		img.batch()
 			.resize(nextWidth, nextHeight)
-			.writeFile( path, (err) => {
-				if(err) {
+			.writeFile(path, (err) => {
+				if( err ) {
 					return console.log(err);
 				}
 
@@ -68,18 +68,19 @@ const resizeImg = (path) => {
 
 };
 
-if( usr.type === 'folder' ) {
+if( userInput.type === 'folder' ) {
 
-	acceptExtenstion.map( (type) => {
+	acceptedFileExtenstion.map((type) => {
 
-		const regex = new RegExp( `\.${type}$` );
-		fs.readdirSync( usr.target )
-			.filter( (file) => regex.test(file) )
-			.map( (file) => resizeImg(`./${usr.target}/${file}`) );
+		const regex = new RegExp(`\.${type}$`);
+
+		fs.readdirSync(userInput.target)
+			.filter((file) => regex.test(file))
+			.map((file) => resizeImg(`./${userInput.target}/${file}`));
 
 	});
 
 }
 else {
-	resizeImg(usr.target);
+	resizeImg(userInput.target);
 }
