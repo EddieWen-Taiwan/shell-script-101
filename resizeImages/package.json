@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Eddie Wen <m20021991y@gmail.com> (http://eddiewen.me)",
+  "author": "Eddie Wen <eddiewen.tw@gmail.com> (http://eddiewen.me)",
   "license": "MIT",
   "dependencies": {
     "lwip": "0.0.9"
