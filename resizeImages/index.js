@@ -3,7 +3,9 @@
 const fs = require('fs');
 const lwip = require('lwip');
 
-// used when target is a folder
+/**
+ * used when target is a folder
+ */
 const acceptExtenstion = [ 'jpg', 'png' ];
 
 const usr = {
@@ -17,9 +19,13 @@ if( usr.width === 'auto' && usr.height === 'auto' ) {
 	return 'Please enter size.';
 }
 
-// handle target type (folder / file)
+/**
+ * handle target type (folder / file)
+ */
 if( fs.statSync(usr.target).isDirectory() ) {
-	// clear path
+	/**
+	 * clear path
+	 */
 	if( usr.target.substr(-1) === '/' ) {
 		usr.target = usr.target.substr(0, usr.target.length - 1);
 	}
@@ -28,7 +34,9 @@ else {
 	usr.type = 'file';
 }
 
-// resize single image
+/**
+ * resize single image
+ */
 const resizeImg = (path) => {
 
 	lwip.open( path, (err, img) => {
