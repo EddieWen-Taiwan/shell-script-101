@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 const fs = require('fs');
-const lwip = require('lwip');
+const Jimp = require('jimp');
 
 /**
  * used when target is a folder
@@ -11,11 +11,11 @@ const acceptedFileExtenstion = ['jpg', 'png'];
 const userInput = {
 	type: 'folder',
 	target: process.argv[2],
-	width: /^\d+$/.test(process.argv[3]) ? parseInt(process.argv[3]) : 'auto',
-	height: /^\d+$/.test(process.argv[4]) ? parseInt(process.argv[4]) : 'auto',
+	width: /^\d+$/.test(process.argv[3]) && parseInt(process.argv[3]),
+	height: /^\d+$/.test(process.argv[4]) && parseInt(process.argv[4]),
 };
 
-if( userInput.width === 'auto' && userInput.height === 'auto' ) {
+if( !userInput.width && !userInput.height ) {
 	console.log('Please enter a new size.');
 	return;
 }
@@ -40,33 +40,18 @@ else {
  */
 const resizeImg = (path) => {
 
-	lwip.open(path, (err, img) => {
+	Jimp.read(path)
+		.then((image) => {
 
-		let nextWidth = userInput.width;
-		let nextHeight = userInput.height;
+			image
+				.resize(
+					userInput.width || Jimp.AUTO,
+					userInput.height || Jimp.AUTO
+				)
+				.write(path);
 
-		if( nextWidth === 'auto') {
-
-			nextWidth = nextHeight * img.width() / img.height();
-
-		} else if ( nextHeight === 'auto' ) {
-
-			nextHeight = nextWidth * img.height() / img.width();
-
-		}
-
-		img.batch()
-			.resize(nextWidth, nextHeight)
-			.writeFile(path, (err) => {
-				if( err ) {
-					console.log(err);
-					return;
-				}
-
-				console.log(`${path} file is resizd`);
-			});
-
-	});
+		})
+		.catch((err) => console.log(err));
 
 };
 
